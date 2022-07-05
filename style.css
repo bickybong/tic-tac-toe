@@ -1,0 +1,35 @@
+:root{
+    --ppl: #9333ea;
+    --red: #da5f5b;
+    --green: #8AEA33;
+    --blue: #33E5EA;
+    --grey: #e7e5e4;
+    --white: azure;
+}
+ 
+body{
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: var(--white);
+    display: grid;
+    grid: 15vh 1fr/1fr;
+}
+
+#header{
+    background-color: var(--red);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mid{
+    background-color: var(--grey);
+    display: grid;
+    grid: 1fr 1fr 1fr/ 1fr 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+}
