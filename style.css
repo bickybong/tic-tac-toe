@@ -30,6 +30,16 @@ body{
     background-color: var(--grey);
     display: grid;
     grid: 1fr 1fr 1fr/ 1fr 1fr 1fr;
-    align-items: center;
+    align-items: stretch;
+    justify-content: stretch;
+    margin: 1rem;
+}
+
+#mid > div{
+    border: 3px solid;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    font-size: 10vw;
+    font-weight: bolder;
 }
