@@ -1,23 +1,23 @@
+gameboard = [];
 var board = (function(){//board updates
     const o = 'O';
     const x = 'X';
     const s = '';
-    gameboard = {top:[s,s,s], mid:[s,s,s], bot:[s,s,s]};
-    const _body = document.querySelector('#mid');
-    function viewboard(){for (const section in gameboard){
-        count = 0;
-        for (const char of gameboard[section]){
-            const item = document.createElement('div')
+    var refresh =( function(){
+        gameboard = [];
+        for (let i=0; i<9; i++){
+            gameboard.push(s);
+        }//refresh gameboard
+        const _body = document.querySelector('#mid');
+        for (const char of gameboard){
+            const item = document.createElement('div');
             item.classList.add('item');
             _body.appendChild(item);
             item.textContent = char;
-
-            count++
-        }}};
-    return {gameboard, viewboard};
+        }//create board divs
+    })();
+    return {refresh};
 })();
-
-board.viewboard();
 
 const players = (type) =>{//player functions
     score = 0;
