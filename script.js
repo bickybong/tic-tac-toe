@@ -3,21 +3,29 @@ var board = (function(){//board updates
     const o = 'O';
     const x = 'X';
     const s = '';
-    var refresh =( function(){
-        gameboard = [];
-        for (let i=0; i<9; i++){
-            gameboard.push(s);
-        }//refresh gameboard
+
+    function create(){
         const _body = document.querySelector('#mid');
+        _body.textContent="";
         for (const char of gameboard){
             const item = document.createElement('div');
             item.classList.add('item');
             _body.appendChild(item);
             item.textContent = char;
         }//create board divs
-    })();
-    return {refresh};
+    };
+
+    function refresh() {
+        gameboard = [];
+        for (let i=0; i<9; i++){
+            gameboard.push(s);
+        }//refresh gameboard
+        create()
+    };
+    return {refresh, create};
 })();
+
+board.refresh();
 
 const players = (type) =>{//player functions
     score = 0;
