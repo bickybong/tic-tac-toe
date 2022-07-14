@@ -1,10 +1,7 @@
 gameboard = [];
 var board = (function(){//board updates
-    const o = 'O';
-    const x = 'X';
-    const s = '';
 
-    function create(){
+    function create(){//create board divs
         const _body = document.querySelector('#mid');
         _body.textContent="";
         for (const char of gameboard){
@@ -12,14 +9,15 @@ var board = (function(){//board updates
             item.classList.add('item');
             _body.appendChild(item);
             item.textContent = char;
-        }//create board divs
+        }
     };
 
-    function refresh() {
+    const s = '';
+    function refresh() {//refresh gameboard
         gameboard = [];
         for (let i=0; i<9; i++){
             gameboard.push(s);
-        }//refresh gameboard
+        }
         create()
     };
     return {refresh, create};
@@ -27,31 +25,72 @@ var board = (function(){//board updates
 
 board.refresh();
 
-const players = (type) =>{//player functions
-    score = 0;
-    const turn=()=>{
+var admin = (function(){//turn order
+    p1 = {type:"X", score:0, player:"Player X"};
+    p2 = {type:"O", score:0, player:"Player O"};
+    const announcer = document.querySelector('#bottom');
+    const refreshButton = document.querySelector('.refBut');
+    const scoreX = document.querySelector('.scoreX');
+    const scoreO = document.querySelector('.scoreO');
+
+    refreshButton.onclick = () =>{
+        board.refresh();
+        turn(p1, p2, 0);
+    }
+    
+    const turn=(p1, p2, rounds)=>{
         var children = document.querySelectorAll(".item");
-        children.forEach(div =>{
+        count = 0;
+        children.forEach(div =>{//plays turns with clicks
+            announcer.textContent= `${p1.player} Turn`;
+            div.dataset.id = count;//track position of cell
             div.addEventListener('click', (e) => {
                 if (!e.target.textContent){
-                    e.target.style.backgroundColor = "azure";
-                    e.target.textContent = type;
-                }})
-        });
-        };
-    return {score, type, turn};
-}
+                    gameboard.splice( div.dataset.id,1,p1.type);
+                    board.create();
+                    
+                    if (wincon(p1)){
+                        announcer.textContent= `${p1.player} Wins!`;
+                        p1.score++;
+                        updateScores();
+                    }else if(tie(rounds)){
+                        announcer.textContent= `Its a Tie!`;
+                    }else{
+                        rounds++;
+                        turn(p2, p1, rounds);//recursively calls to next player turn
+                    };
+                }});
+                count++;
+    })};
 
-const p1 = players('X');
-const p2 = players('O');
-
-var admin = (function(){//turn order
-    console.log("turn")
-    const board1 = board;
-    while (true){
-        p1.turn();
-        p2.turn();
-        break;
+    function wincon(p1){//check if wincondition is met
+        letter = p1.type;
+        if(gameboard[0]===letter && gameboard[1]===letter &&gameboard[2]===letter 
+            ||gameboard[0]===letter && gameboard[3]===letter &&gameboard[6]===letter
+            ||gameboard[0]===letter && gameboard[4]===letter &&gameboard[8]===letter
+            ||gameboard[1]===letter && gameboard[4]===letter &&gameboard[7]===letter
+            ||gameboard[2]===letter && gameboard[4]===letter &&gameboard[6]===letter
+            ||gameboard[2]===letter && gameboard[5]===letter &&gameboard[8]===letter
+            ||gameboard[3]===letter && gameboard[4]===letter &&gameboard[5]===letter
+            ||gameboard[6]===letter && gameboard[7]===letter &&gameboard[8]===letter){
+            return true;
+            }
+        return false;
     };
-    return board1;
+    
+    function tie(rounds){//check if tie
+        if (rounds === 8){
+            return true;
+        };
+        return false;
+    };
+    
+    function updateScores(){//update scoreboard
+        scoreX.textContent=`Player X score: ${p1.score}`;
+        scoreO.textContent=`Player O score: ${p2.score}`;
+    };
+
+    updateScores();
+    turn(p1, p2, 0);
+    return;
 })();
